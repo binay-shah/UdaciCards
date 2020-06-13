@@ -1,6 +1,9 @@
 import  React from 'react';
-import { View, TouchableOpacity, Text, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { View, TouchableOpacity, Text, TextInput, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
 import { white } from '../utils/colors'
+import { saveDeckTitle } from '../utils/api'
+import { connect }  from 'react-redux' 
+import { addDeck } from '../actions'
 
 
 function SubmitBtn ({onPress }) {
@@ -23,23 +26,32 @@ class NewDeck extends React.Component{
 		
 		this.setState(() => ({
 			inputText: text
-		}))
-			
-	
+		}))	
+	}
+
+	handleSubmit = () => {
+		const { dispatch } = this.props		
+		dispatch(addDeck(this.state.inputText))
+		saveDeckTitle(this.state.inputText)
+		this.setState(() => ({
+			inputText: ''
+		}))	
+		this.props.navigation.goBack()	
+
 	}
 
 	render(){
-		const { inputText} = this.state
+		const { inputText } = this.state
 		return(
 			<KeyboardAvoidingView style={styles.container}>
 				<Text style={[styles.newDeckTitleText, {marginBottom: 30}]}>What is the title of your new deck?</Text>
-				<TextInput 
+				<TextInput				  	 
 				  placeholder = "Deck title"
-			      style={styles.textInput}
+			      style={[styles.textInput,  {paddingLeft: 10}]}
 			      onChangeText={this.onChangeText}
 			      value={inputText}
 			    />
-				<SubmitBtn />
+				<SubmitBtn onPress={this.handleSubmit}/>
 			</KeyboardAvoidingView>
 		)
 	}
@@ -71,8 +83,7 @@ const styles = StyleSheet.create({
 		height: 80,
 		borderRadius: 10,
 		justifyContent: 'center',
-		alignItems: 'center',
-		
+		alignItems: 'center'	
 		
 	},
 	newDeckTitleText: {
@@ -97,7 +108,11 @@ const styles = StyleSheet.create({
 	
 })
 
+function mapStateToProps (entries) {
+  return {
+    entries
+  }
+}
 
-
-export default NewDeck
+export default connect(mapStateToProps)(NewDeck)
 

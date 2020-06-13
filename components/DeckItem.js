@@ -6,8 +6,9 @@ class DeckItem extends React.Component{
 	render(){
 		return(
 			<View>
-				<Text style={styles.titleText}>UdaciCards</Text>
-				<Text style={styles.numCardsText}>3 Cards</Text>
+				<Text style={styles.titleText}>{this.props.title}</Text>
+				<Text style={styles.numCardsText}>{this.props.numCards} Cards</Text>
+				
 			</View>	
 		)
 	}

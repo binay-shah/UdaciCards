@@ -1,26 +1,32 @@
 import  React from 'react';
 import { View, TouchableOpacity, Text, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { white } from '../utils/colors'
+import { connect } from 'react-redux'
+import { addCard} from '../actions'
+import { addCardToDeck } from '../utils/api' 
 
 
-function SubmitBtn ({onPress }) {
+function SubmitBtn ({onPress, disabled }) {
 	return (
 		<TouchableOpacity style={
         	Platform.OS === "ios" ? stylesl.iosBtn : styles.androidBtn}
-      		onPress={onPress}>
+      		onPress={onPress}
+      		disabled={disabled}>
       		<Text style={styles.submitBtnText}>SUBMIT</Text>
     	</TouchableOpacity>
 	)
 }
 
-class NewDeck extends React.Component{
+class NewQuestion extends React.Component{
 
 	state = {
 		answerText: '',
 		questionText: ''
 	}
 
-	onChangeQuestion = (text) => {
+	handleQuestionChange = (text) => {
+		if(text === '')
+			return
 		this.setState(() => ({
 			questionText: text
 			
@@ -28,27 +34,44 @@ class NewDeck extends React.Component{
 	}
 
 	onChangeAnswer = (text) => {
+		if(text === '')
+			return
 		this.setState(() => ({
 			answerText: text
 		}))
 	}
 
+	handleSubmit = () => {		
+		const { questionText, answerText} = this.state
+		this.props.dispatch(addCard(this.props.route.params.key, {question: questionText, answer: answerText }))
+		addCardToDeck(this.props.route.params.key, {question: questionText, answer: answerText })
+		this.setState(() => ({
+			answerText: '',
+			questionText: ''
+		}))	
+		this.props.navigation.goBack()
+
+	}
+
 	render(){
 		const { answerText, questionText}  = this.state
+		
 		return(
 			<KeyboardAvoidingView style={styles.container}>
 				
-				<TextInput 
-			      style={styles.textInput}
-			      onChangeText={text => this.onChangeQuestion(text)}
+				<TextInput
+				  placeholder='Question'	 
+			      style={[styles.textInput, {paddingLeft: 10}]}
+			      onChangeText={ this.handleQuestionChange}
 			      value={questionText}
 			    />
-			    <TextInput 
-			      style={styles.textInput}
-			      onChangeText={text => this.onChangeAnswer(text)}
+			    <TextInput
+			      placeholder='Answer'	 
+			      style={[styles.textInput, {paddingLeft: 10}]}
+			      onChangeText={ this.handleAnswerChange}
 			      value={answerText}
 			    />
-				<SubmitBtn />
+				<SubmitBtn disabled={answerText === '' && questionText === ''} onPress={this.handleSubmit}/>
 			</KeyboardAvoidingView>
 		)
 	}
@@ -108,5 +131,5 @@ const styles = StyleSheet.create({
 
 
 
-export default NewDeck
+export default connect((entries) => ({entries}))(NewQuestion)
 

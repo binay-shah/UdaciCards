@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 	textBtn: {
 		textAlign: 'center',
 		color: 'red',
-		marginTop: 10
+		marginTop: 10,
+		fontSize: 24
 	}
 })

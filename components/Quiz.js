@@ -1,42 +1,44 @@
 import  React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import TextButton from "./TextButton"
+import { connect } from 'react-redux'
 import { white } from '../utils/colors'
+import QuizTemplate from './QuizTemplate'
+import QuizResult from './QuizResult'
 
 
-function CorrectBtn ({ onPress }) {
-  return (
-    <TouchableOpacity style={[
-          Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn, {backgroundColor: 'green'}, {outline: 'true'}]}
-      onPress={onPress}>
-        <Text style={styles.btnText}>Correct</Text>
-    </TouchableOpacity>
-  )
-}
 
-
-function IncorrectBtn ({ onPress }) {
-  return (
-    <TouchableOpacity style={[
-          Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn, {backgroundColor: 'red'}, {outline: 'true'}]}
-      onPress={onPress}>
-        <Text style={styles.btnText}>Incorrect</Text>
-    </TouchableOpacity>
-  )
-}
 
 class Quiz extends React.Component{
+
+  state = {
+    currentCard: 0, 
+    correctCount: 0
+  }
+
+  handleAnswer = (isCorrect) => {
+    this.setState((currentState) => ({
+      correctCount: isCorrect ? currentState.correctCount + 1 : currentState.correctCount,
+      currentCard: currentState.currentCard + 1
+    }))
+  }
+
 	render(){
+
+    const { key} = this.props.route.params
+    const { entries } = this.props
+    const cards = entries[key].questions    
+    const{ currentCard, correctCount } = this.state
+    const totalCards = cards.length
+    
+
 		return(
-			<View style={styles.container}>
-        <View style={{alignItems: 'center'}}>
-  				<Text style={styles.questionText}>Does React Native work with Android</Text>
-  				<TextButton style={{padding: 10}}>Question</TextButton>
-        </View>  
-        <View>
-  				<CorrectBtn />
-          <IncorrectBtn />
-          </View>
+			<View style={styles.container}>           
+        {
+          currentCard < cards.length ? 
+            <QuizTemplate card={cards[currentCard]} onAnswer={this.handleAnswer} currentCard={currentCard} totalCards={totalCards} /> 
+            : <QuizResult score={correctCount*100/totalCards} />
+        }
 			</View>
 		)
 	}
@@ -89,4 +91,10 @@ const styles = StyleSheet.create({
   
 })
 
-export default Quiz
+function mapStateToProps (entries, ) {
+  return {
+    entries
+  }
+}
+
+export default connect(mapStateToProps)(Quiz)

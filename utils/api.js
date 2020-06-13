@@ -33,29 +33,31 @@ function setDummyData () {
 }
 
 export function getDecks(){
+     return AsyncStorage.getItem(DECK_STORAGE_KEY)
+}
+
+export function getDeck(id){
+    return getDecks()
+              .then((results) => {
+                return JSON.parse(results)[id]
+              }) 
+    
+}
+
+export function addCardToDeck(title, card){
     return AsyncStorage.getItem(DECK_STORAGE_KEY)
-
-}
-
-export function getDeck({entry, key}){
-    return AsyncStorage.mergeItem(CALENDAR_STORAGE_KEY, JSON.stringify({
-        [key]: entry,
-    }))
-}
-
-export function addCardToDeck({entry, key}){
-    return AsyncStorage.mergeItem(CALENDAR_STORAGE_KEY, JSON.stringify({
-        [key]: entry,
-    }))
-}
-
-export function saveDeckTitle(key){
-    return AsyncStorage.getItem(CALENDAR_STORAGE_KEY)
         .then((results) =>{
             const data = JSON.parse(results)
-            data[key] = undefined
-            delete data[key]
-            AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
+           
+             data[title].questions.push(card)    
+            console.log(data)        
+            AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data))
         })
+}
+
+export function saveDeckTitle(title){
+    return AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify({
+    [title]: {title: title, questions: []}
+  }))
 }
 

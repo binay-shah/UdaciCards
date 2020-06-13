@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
+import Quiz from './Quiz'
 import DeckItem from './DeckItem'
 import { white, purple } from '../utils/colors'
+import { connect } from 'react-redux'
 
 function AddBtn ({ onPress }) {
   return (
@@ -13,11 +15,12 @@ function AddBtn ({ onPress }) {
   )
 }
 
-function StartBtn ({ onPress }) {
+function StartBtn ({ onPress, disabled }) {
   return (
     <TouchableOpacity style={[
         	Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn, {backgroundColor: 'black'}]}
-      		onPress={onPress}>
+      		onPress={onPress}
+      		disabled={disabled}>
         <Text style={[styles.btnText, {color: 'white'}]}>Start Quiz</Text>
     </TouchableOpacity>
   )
@@ -27,21 +30,24 @@ function StartBtn ({ onPress }) {
 class Deck extends  React.Component{
 
 	startQuiz = () => {
-
+		this.props.navigation.navigate('Quiz', {key: this.props.route.params.key})
 	}
 
 	addCard = () => {
+		this.props.navigation.navigate('NewQuestion', {key: this.props.route.params.key})
 
 		
 	}
 
 	render(){
+		const { key } = this.props.route.params			
+		const { entries} = this.props	
 		return(
 			<View style={styles.container}>
-				<DeckItem />
+				<DeckItem title = {entries[key].title} numCards={entries[key].questions.length}/>
 				<View>
 					<AddBtn onPress={this.addCard} />
-					<StartBtn onPress={this.startQuiz} />
+					<StartBtn disabled={entries[key].questions.length === 0} onPress={this.startQuiz} />
 	        	</View>				
 			</View>
 
@@ -86,4 +92,10 @@ const styles = StyleSheet.create({
 	
 })
 
-export default Deck
+function mapStateToProps (entries) {
+  return {
+    entries
+  }
+}
+
+export default connect(mapStateToProps)(Deck)
