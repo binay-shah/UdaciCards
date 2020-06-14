@@ -23,6 +23,13 @@ class Quiz extends React.Component{
     }))
   }
 
+  handleRestartQuiz = () => {
+    this.setState(() => ({
+      currentCard: 0, 
+      correctCount: 0
+    }))
+  }
+
 	render(){
 
     const { key} = this.props.route.params
@@ -37,7 +44,7 @@ class Quiz extends React.Component{
         {
           currentCard < cards.length ? 
             <QuizTemplate card={cards[currentCard]} onAnswer={this.handleAnswer} currentCard={currentCard} totalCards={totalCards} /> 
-            : <QuizResult score={correctCount*100/totalCards} />
+            : <QuizResult restartQuiz={this.handleRestartQuiz} backToDeck={() => this.props.navigation.goBack()} score={correctCount*100/totalCards} />
         }
 			</View>
 		)

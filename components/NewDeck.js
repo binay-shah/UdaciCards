@@ -36,7 +36,7 @@ class NewDeck extends React.Component{
 		this.setState(() => ({
 			inputText: ''
 		}))	
-		this.props.navigation.goBack()	
+		this.props.navigation.navigate('Deck', {key:  this.state.inputText})	
 
 	}
 

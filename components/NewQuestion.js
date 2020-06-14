@@ -33,7 +33,7 @@ class NewQuestion extends React.Component{
 		}))
 	}
 
-	onChangeAnswer = (text) => {
+	handleAnswerChange = (text) => {
 		if(text === '')
 			return
 		this.setState(() => ({

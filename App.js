@@ -12,10 +12,16 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import MainNav from './router/router'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { setLocalNotification } from './utils/notification'
 
 
 
 export default class App extends React.Component {
+
+  componentDidMount(){
+
+    setLocalNotification()
+  }
 
   render(){
 
