@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-const DECK_STORAGE_KEY = 'UdaciCards:calendar'
+const DECK_STORAGE_KEY = 'UdaciCards:decks'
 
 const dummyData = {
   React: {
@@ -28,12 +28,13 @@ const dummyData = {
 }
 
 function setDummyData () { 
-  AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(dummyData))
-  return dummyData
+   AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(dummyData))
+  
 }
 
 export function getDecks(){
      return AsyncStorage.getItem(DECK_STORAGE_KEY)
+      
 }
 
 export function getDeck(id){

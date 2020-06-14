@@ -31,7 +31,6 @@ function UdaciStatusBar ({backgroundColor, ...props}) {
 export default class App extends React.Component {
 
   componentDidMount(){
-
     setLocalNotification()
   }
 
