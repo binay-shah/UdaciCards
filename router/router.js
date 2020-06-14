@@ -13,9 +13,11 @@ const Tab = createMaterialTopTabNavigator()
 
 
 const TabNav = () => (
-		 <Tab.Navigator>
+		 <Tab.Navigator tabBarOptions={{ activeTintColor: 'black', inactiveTintColor: 'gray',
+           indicatorStyle :{  backgroundColor:'yellow'} }}>
+           
             <Tab.Screen name="Decks" options={{title: 'Decks'}} component={DeckList} />
-            <Tab.Screen name="NewDeck" component={NewDeck} />		      
+            <Tab.Screen name="NewDeck" options={{title: 'New Deck'}} component={NewDeck} />		      
           </Tab.Navigator>
 )
 

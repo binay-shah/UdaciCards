@@ -30,6 +30,11 @@ class NewDeck extends React.Component{
 	}
 
 	handleSubmit = () => {
+		if(this.state.inputText === ''){
+			alert('Enter title of the deck')
+			return
+		}
+
 		const { dispatch } = this.props		
 		dispatch(addDeck(this.state.inputText))
 		saveDeckTitle(this.state.inputText)
